@@ -357,7 +357,7 @@ export async function POST(request: NextRequest) {
 ---
 
 ## Tech Stack
-- **Frontend**: Next.js 15 + Tailwind CSS + shadcn/ui
+- **Frontend**: Next.js 16 + React 19 + Tailwind CSS v4 + shadcn/ui
 - **API**: TinyFish Mino SSE streaming endpoint
 - **Hosting**: Vercel (free tier)
 - **Build Tool**: Claude Code
