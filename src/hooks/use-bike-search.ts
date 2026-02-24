@@ -20,6 +20,8 @@ export interface BikeShop {
   website: string;
   bikes: Bike[];
   notes: string | null;
+  source?: 'cache' | 'live';
+  cached_at?: string;
 }
 
 export interface SearchState {
@@ -28,6 +30,7 @@ export interface SearchState {
   progress: { completed: number; total: number };
   error: string | null;
   elapsed: string | null;
+  cachedCount: number;
 }
 
 function normalizeShop(raw: unknown): BikeShop {
@@ -92,6 +95,7 @@ export function useBikeSearch(): {
     progress: { completed: 0, total: 0 },
     error: null,
     elapsed: null,
+    cachedCount: 0,
   });
 
   const abortControllerRef = useRef<AbortController | null>(null);
@@ -120,6 +124,7 @@ export function useBikeSearch(): {
         progress: { completed: 0, total: 0 },
         error: null,
         elapsed: null,
+        cachedCount: 0,
       });
 
       (async () => {
@@ -169,6 +174,8 @@ export function useBikeSearch(): {
 
               if (event.type === 'SHOP_RESULT') {
                 const shop = normalizeShop(event.shop);
+                shop.source = (event.source as BikeShop['source']) ?? 'live';
+                shop.cached_at = event.cached_at ? String(event.cached_at) : undefined;
                 setState((prev) => ({
                   ...prev,
                   shops: [...prev.shops, shop],
@@ -180,11 +187,13 @@ export function useBikeSearch(): {
               } else if (event.type === 'SEARCH_COMPLETE') {
                 const total = Number(event.total ?? 0);
                 const elapsed = String(event.elapsed ?? '');
+                const cachedCount = Number(event.cached ?? 0);
                 setState((prev) => ({
                   ...prev,
                   isSearching: false,
                   progress: { ...prev.progress, total },
                   elapsed,
+                  cachedCount,
                 }));
               }
             }

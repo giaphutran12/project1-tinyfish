@@ -1,7 +1,7 @@
 import { BikeShop } from '@/hooks/use-bike-search';
 import { BikeCard } from './bike-card';
 import { Button } from '@/components/ui/button';
-import { ExternalLink } from 'lucide-react';
+import { ExternalLink, Zap } from 'lucide-react';
 
 function getHostname(url: string): string {
   try {
@@ -23,6 +23,12 @@ export function ShopGroup({ shop }: ShopGroupProps) {
           <h2 className="text-2xl font-bold tracking-tight text-zinc-900 flex items-center gap-2">
             🏪 {shop.shop_name}
             <span className="text-lg font-normal text-zinc-500">— {shop.city}</span>
+            {shop.source === 'cache' && (
+              <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-0.5 text-xs font-medium text-emerald-700 border border-emerald-200">
+                <Zap className="w-3 h-3" />
+                Cached
+              </span>
+            )}
           </h2>
           <a 
             href={shop.website} 

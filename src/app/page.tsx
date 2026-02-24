@@ -63,11 +63,14 @@ export default function Home() {
               <span>
                 {state.isSearching
                   ? 'Searching...'
-                  : `Search complete — ${state.elapsed || '0s'}`}
+                  : state.cachedCount > 0 && state.cachedCount === state.progress.total
+                    ? `⚡ Instant results from cache`
+                    : `Search complete — ${state.elapsed || '0s'}`}
               </span>
               <span>
                 {state.progress.completed}
-                {state.progress.total ? `/${state.progress.total}` : ''} shops loaded
+                {state.progress.total ? `/${state.progress.total}` : ''} shops
+                {state.cachedCount > 0 && ` (${state.cachedCount} cached)`}
               </span>
             </div>
             <div className="h-2 w-full bg-zinc-100 rounded-full overflow-hidden">
