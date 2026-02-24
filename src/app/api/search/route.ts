@@ -1,7 +1,7 @@
 export const runtime = "edge";
 
 const MINO_SSE_URL = "https://agent.tinyfish.ai/v1/automation/run-sse";
-const REQUEST_TIMEOUT_MS = 90_000;
+const REQUEST_TIMEOUT_MS = 270_000;
 const REQUEST_STAGGER_MS = 500;
 
 const CITY_SITES: Record<string, string[]> = {
