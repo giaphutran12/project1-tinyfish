@@ -367,5 +367,5 @@ export async function POST(request: NextRequest) {
 - Mino integration + prompt tuning: 1-2 hours
 - Frontend polish + real-time streaming UX: 1-2 hours
 - Testing across all cities + edge cases: 1 hour
-- Demo video recording: 30 min
-- **Total: ~4-6 hours**
+- Demo video recording: 1 hour
+- **Total: ~4-6.5 hours**
