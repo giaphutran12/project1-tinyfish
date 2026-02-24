@@ -1,7 +1,8 @@
 export const runtime = "nodejs";
+export const maxDuration = 800; // Vercel Pro allows up to 800s for Node.js runtime
 
 const MINO_SSE_URL = "https://agent.tinyfish.ai/v1/automation/run-sse";
-const REQUEST_TIMEOUT_MS = 600_000;
+const REQUEST_TIMEOUT_MS = 780_000;
 const REQUEST_STAGGER_MS = 500;
 
 const CITY_SITES: Record<string, string[]> = {
