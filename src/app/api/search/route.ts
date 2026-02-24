@@ -339,11 +339,11 @@ export async function POST(request: Request): Promise<Response> {
             const siteEnqueue = (payload: unknown) => {
               const event = payload as Record<string, unknown>;
               if (event.type === "SHOP_RESULT") {
-                enqueue({ ...event, source: "live" });
-                // Cache the new result (fire-and-forget)
+                // Cache FIRST — must persist even if client disconnected
                 if (supabase && event.shop) {
                   cacheResult(supabase, city, url, event.shop).catch(() => {});
                 }
+                enqueue({ ...event, source: "live" });
               } else {
                 enqueue(payload);
               }
