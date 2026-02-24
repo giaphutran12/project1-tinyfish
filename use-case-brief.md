@@ -363,9 +363,9 @@ export async function POST(request: NextRequest) {
 - **Build Tool**: Claude Code
 
 ## Estimated Build Time
-- Scaffold + basic UI: 2-3 hours
-- Mino integration + prompt tuning: 3-4 hours
-- Frontend polish + real-time streaming UX: 3-4 hours
-- Testing across all cities + edge cases: 2-3 hours
-- Demo video recording: 1 hour
-- **Total: ~12-15 hours** (well within 72h window)
+- Scaffold + UI: ~30 min (Next.js + Tailwind + shadcn/ui)
+- Mino integration + prompt tuning: 1-2 hours
+- Frontend polish + real-time streaming UX: 1-2 hours
+- Testing across all cities + edge cases: 1 hour
+- Demo video recording: 30 min
+- **Total: ~4-6 hours**
