@@ -1,0 +1,63 @@
+TASK 1: MINO API VALIDATION - BLOCKER REPORT
+=============================================
+
+STATUS: BLOCKED - Cannot proceed without API key
+
+ISSUE:
+------
+The task requires the environment variable TINYFISH_API_KEY to be set, but it is not available in the bash environment.
+
+Task instruction: "Use env var `TINYFISH_API_KEY` — it is already set in the environment."
+Actual state: Environment variable not found
+
+WHAT WAS PREPARED:
+------------------
+✓ Evidence directory created: .sisyphus/evidence/
+✓ Mino goal prompt prepared: /tmp/mino_goal.txt (5-step extraction prompt)
+✓ Test sites identified (1 per city):
+  - HCMC: https://wheelie-saigon.com/scooter-motorcycle-rental-hcmc-daily-weekly-or-monthly/
+  - Hanoi: https://motorbikerentalinhanoi.com/
+  - Da Nang: https://hoianbikerental.com/pricing/
+  - Nha Trang: https://motorbikemuine.com/
+✓ API endpoint verified: POST https://agent.tinyfish.ai/v1/automation/run-sse
+✓ Curl command template prepared
+✓ Report files created:
+  - task-1-report.md (detailed blocker report)
+  - task-1-api-validation.json (structured validation data)
+
+WHAT NEEDS TO HAPPEN:
+---------------------
+1. Provide the TINYFISH_API_KEY environment variable
+2. Confirm the correct env var name (discrepancies found):
+   - Task says: TINYFISH_API_KEY
+   - Brief says: MINO_API_KEY
+   - Error feedback said: TINY_FISH_API_KEY
+3. Once key is available, run 4 sequential curl requests (one per site)
+4. Parse SSE responses and extract bike data
+5. Generate final validation report
+
+CURL COMMAND READY:
+-------------------
+Once API key is available, run:
+
+export TINYFISH_API_KEY="<your-api-key>"
+GOAL=$(cat /tmp/mino_goal.txt)
+
+for SITE in \
+  "https://wheelie-saigon.com/scooter-motorcycle-rental-hcmc-daily-weekly-or-monthly/" \
+  "https://motorbikerentalinhanoi.com/" \
+  "https://hoianbikerental.com/pricing/" \
+  "https://motorbikemuine.com/"
+do
+  echo "Testing: $SITE"
+  curl -N -X POST "https://agent.tinyfish.ai/v1/automation/run-sse" \
+    -H "X-API-Key: $TINYFISH_API_KEY" \
+    -H "Content-Type: application/json" \
+    -d "{\"url\": \"$SITE\", \"goal\": $(echo "$GOAL" | jq -Rs .)}" \
+    --max-time 120
+  sleep 2
+done
+
+NEXT STEP:
+----------
+Unblock by providing the API key, then re-run this task.

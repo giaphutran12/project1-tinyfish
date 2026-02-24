@@ -3,6 +3,8 @@
 **Generated:** 2026-02-24
 **Mission:** Idea approved → working demo → PR merged → hired.
 
+**Universal rules apply** — see `C:\Users\Administrator\.claude\AGENTS.md` for orchestrator behavior, background tasks, research priorities, and end-of-session protocol.
+
 ## THE MISSION
 
 You are helping a developer land a Product Growth Intern role at TinyFish ($47M Series A, SF-based AI infra). The interviewer is **Sky Zhang**. The assignment:
@@ -10,7 +12,7 @@ You are helping a developer land a Product Growth Intern role at TinyFish ($47M 
 1. **Phase 1 (24h)**: Submit a use case idea with full documentation → get approved by Sky
 2. **Phase 2 (72h after approval)**: Build a working MVP demo, submit PR to GitHub, post on socials
 
-**Everything you do must serve this timeline.** No yak-shaving. No over-engineering. Ship or die.
+**Everything you do must serve this timeline.** No yak-shaking. No over-engineering. Ship or die.
 
 ## WHAT TINYFISH / MINO IS
 
@@ -26,14 +28,6 @@ It returns structured JSON with exactly what you asked for.
 - Works on niche sites that have NO API
 
 **Mino API docs are indexed in Nia** (source: `123d2659-98bb-4843-8a26-f6c6f4c09a30`).
-
-## RESEARCH TOOL PRIORITY (MANDATORY)
-
-1. **Nia FIRST** — `search.sh universal`, `sources.sh read`, `search.sh deep`. Most accurate, full content.
-2. **Exa web search SECOND** — `websearch_web_search_exa`. Fallback if Nia fails.
-3. **Context7 / Webfetch LAST** — Only if both above fail.
-
-**CRITICAL**: NEVER skip Nia. NEVER block the main agent with synchronous Nia calls — always use `run_in_background=true` or delegate to librarian subagents.
 
 ## NIA INDEXED SOURCES (ALREADY AVAILABLE)
 
@@ -121,7 +115,7 @@ Check the SOP for "Homer's Use Cases" bounty list:
 3. Build frontend that showcases the Mino automation visually
 4. Get a live demo URL (Vercel, Lovable, Railway — anything works)
 5. Record a demo video
-6. Submit PR to github.com/tinyfish-io/mino-apps
+6. Submit PR to github.com/tinyfish-io/tinyfish-cookbook (folder: vietnam-bike-price-scout/)
 7. Write social post using their tool: https://tinyfish-social.vercel.app/
 ```
 
@@ -134,7 +128,7 @@ Check the SOP for "Homer's Use Cases" bounty list:
 
 ## MINO API QUICK REFERENCE
 
-**Base URL**: `https://api.tinyfish.ai` (check docs for exact)
+**Base URL**: `https://agent.tinyfish.ai/v1/automation/run-sse` (check docs for exact endpoints)
 
 **Three endpoint modes:**
 1. **Sync** (`/run/sync`) — Wait for result. Simple. Good for <30s tasks.
@@ -152,54 +146,14 @@ Check the SOP for "Homer's Use Cases" bounty list:
 
 **For exact API details**: `sources.sh read "123d2659-98bb-4843-8a26-f6c6f4c09a30" "quick-start.md"`
 
-## DELEGATION PROTOCOL
+## PROJECT-SPECIFIC GUARDRAILS
 
-- Always use `task()` for implementation work — the main agent orchestrates, subagents build
-- One task per delegation — never batch
-- Use `session_id` for retries and follow-ups (preserves context)
-- Store every `session_id` returned
-
-## ⚠️ BACKGROUND TASKS — MANDATORY RULE
-
-**NEVER use `block=true` when calling `background_output`.** Always `block=false`. No exceptions.
-
-### Why `block=true` is banned
-- The orchestrator must ALWAYS be available to receive user messages
-- No subagent runs without the orchestrator dispatching it — there is never a scenario where you're idle waiting
-- The system sends `[BACKGROUND TASK COMPLETED]` notifications — you never need to poll or wait
-- If a result isn't ready yet, move on. Do research, exploration, or just be available. Come back when notified.
-
-
-**ALWAYS use `run_in_background=true` for ALL `task()` calls.**
-
-When `run_in_background=false` (the blocking mode), the orchestrator is FROZEN.
-It cannot read messages, cannot respond to the user, cannot do anything.
-The user is left staring at a spinning cursor for minutes. This is unacceptable.
-
-**The pattern:**
-```typescript
-// Fire all independent tasks as background, stay responsive:
-const t1 = task(category='quick', run_in_background=true, prompt='...')
-const t4 = task(category='quick', run_in_background=true, prompt='...')
-const t5 = task(category='visual-engineering', run_in_background=true, prompt='...')
-
-// Collect results when needed:
-const result = background_output(task_id=t1.task_id)
-```
-
-**Rules:**
-- Fire ALL independent tasks in background simultaneously
-- After firing, immediately tell the user what tasks are running
-- Stay responsive — read user messages, answer questions while tasks run
-- Collect results with `background_output()` before delegating dependent tasks
-- Use `background_cancel(taskId=...)` to cancel specific tasks when done (NEVER `all=true`)
-## DEBUG-FIRST DEVELOPMENT
-
-Always include server-side logging when building features:
-- `console.log` with `[TAG]` prefix (e.g., `[MINO]`, `[API]`, `[SCRAPE]`)
-- Log Mino API call timing, response status, error paths
-- Include relevant IDs for traceability
-- Client-side: `toast.error()` for user-facing failures, no verbose console.log in prod
+- **Never read `.env` files** — reference `TINYFISH_API_KEY` by name only
+- **MUST use Edge Runtime** on API routes: `export const runtime = 'edge'`
+- **MUST use `getReader()` + buffer pattern for SSE** — NEVER `await response.text()`
+- **No Supabase, no database, no auth, no persistence** — stateless MVP only
+- **PR target**: `tinyfish-io/tinyfish-cookbook`, folder: `vietnam-bike-price-scout/`
+- **Env var name**: `TINYFISH_API_KEY`
 
 ## ANTI-PATTERNS (WILL GET YOU REJECTED)
 
@@ -223,7 +177,7 @@ Always include server-side logging when building features:
 
 - **Interviewer**: Sky Zhang (built the pediatric urgent care example)
 - **Application email**: keith@tinyfish.ai
-- **GitHub repo for PRs**: github.com/tinyfish-io/mino-apps
+- **GitHub repo for PRs**: github.com/tinyfish-io/tinyfish-cookbook
 - **Post generator**: https://tinyfish-social.vercel.app/
 - **Mino playground**: https://mino.ai/
 

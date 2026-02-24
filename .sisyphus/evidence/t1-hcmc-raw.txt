@@ -1,0 +1,26 @@
+data: {"type":"STARTED","runId":"961fcf90-3ac0-4bbb-882c-f51d92fe17b9","timestamp":"2026-02-24T15:24:27.714Z"}
+
+data: {"type":"STREAMING_URL","runId":"961fcf90-3ac0-4bbb-882c-f51d92fe17b9","streamingUrl":"https://tf-f421d438-63e6-4cef-bba5-6cedcbc00cc2.lax0-tinyfish.unikraft.app/stream/0","timestamp":"2026-02-24T15:24:32.154Z"}
+
+data: {"type":"PROGRESS","runId":"961fcf90-3ac0-4bbb-882c-f51d92fe17b9","purpose":"Navigate to the rental page to extract motorbike listings.","timestamp":"2026-02-24T15:24:41.433Z"}
+
+data: {"type":"PROGRESS","runId":"961fcf90-3ac0-4bbb-882c-f51d92fe17b9","purpose":"Extract motorbike rental listings and shop details.","timestamp":"2026-02-24T15:24:51.141Z"}
+
+data: {"type":"PROGRESS","runId":"961fcf90-3ac0-4bbb-882c-f51d92fe17b9","purpose":"Extract pricing table and rental terms including USD prices if available.","timestamp":"2026-02-24T15:25:00.977Z"}
+
+data: {"type":"PROGRESS","runId":"961fcf90-3ac0-4bbb-882c-f51d92fe17b9","purpose":"Check details for one bike to see if USD prices or long-term rates are listed.","timestamp":"2026-02-24T15:25:07.465Z"}
+
+data: {"type":"PROGRESS","runId":"961fcf90-3ac0-4bbb-882c-f51d92fe17b9","purpose":"Extract details for Yamaha WR155 including pricing and availability.","timestamp":"2026-02-24T15:25:14.973Z"}
+
+data: {"type":"PROGRESS","runId":"961fcf90-3ac0-4bbb-882c-f51d92fe17b9","purpose":"Search for USD prices or exchange rate on the rental page.","timestamp":"2026-02-24T15:25:23.256Z"}
+
+data: {"type":"PROGRESS","runId":"961fcf90-3ac0-4bbb-882c-f51d92fe17b9","purpose":"Return to the main rental page to extract all bike listings.","timestamp":"2026-02-24T15:25:35.760Z"}
+
+data: {"type":"PROGRESS","runId":"961fcf90-3ac0-4bbb-882c-f51d92fe17b9","purpose":"Extract full list of bikes with their specific prices and details from the text.","timestamp":"2026-02-24T15:25:44.244Z"}
+
+data: {"type":"PROGRESS","runId":"961fcf90-3ac0-4bbb-882c-f51d92fe17b9","purpose":"Look for specific weekly and monthly price numbers.","timestamp":"2026-02-24T15:25:58.340Z"}
+
+data: {"type":"HEARTBEAT","timestamp":"2026-02-24T15:26:28.341Z"}
+
+data: {"type":"COMPLETE","runId":"961fcf90-3ac0-4bbb-882c-f51d92fe17b9","status":"COMPLETED","timestamp":"2026-02-24T15:26:43.317Z","resultJson":{"shop_name":"Wheelie Saigon","city":"HCMC","website":"https://wheelie-saigon.com/","bikes":[{"name":"Yamaha WR155 Super Motard","engine_cc":155,"type":"adventure","price_daily_usd":40,"price_weekly_usd":null,"price_monthly_usd":null,"deposit_usd":20,"available":true},{"name":"Honda Lead 125","engine_cc":125,"type":"scooter","price_daily_usd":8,"price_weekly_usd":null,"price_monthly_usd":null,"deposit_usd":20,"available":true},{"name":"Suzuki GSX-R150","engine_cc":150,"type":"manual","price_daily_usd":20,"price_weekly_usd":null,"price_monthly_usd":null,"deposit_usd":20,"available":true},{"name":"Honda Scoopy 110","engine_cc":110,"type":"scooter","price_daily_usd":6,"price_weekly_usd":null,"price_monthly_usd":null,"deposit_usd":20,"available":true},{"name":"Kawasaki Ninja 400","engine_cc":400,"type":"manual","price_daily_usd":40,"price_weekly_usd":null,"price_monthly_usd":null,"deposit_usd":20,"available":true},{"name":"Honda Vision 110","engine_cc":110,"type":"scooter","price_daily_usd":6,"price_weekly_usd":null,"price_monthly_usd":null,"deposit_usd":20,"available":true},{"name":"KTM RC390","engine_cc":390,"type":"manual","price_daily_usd":60,"price_weekly_usd":null,"price_monthly_usd":null,"deposit_usd":20,"available":true},{"name":"Honda Winner 150","engine_cc":150,"type":"manual","price_daily_usd":12,"price_weekly_usd":null,"price_monthly_usd":null,"deposit_usd":20,"available":true},{"name":"Yamaha Exciter 150","engine_cc":150,"type":"manual","price_daily_usd":12,"price_weekly_usd":null,"price_monthly_usd":null,"deposit_usd":20,"available":true},{"name":"Honda Blade","engine_cc":110,"type":"semi-auto","price_daily_usd":6,"price_weekly_usd":null,"price_monthly_usd":null,"deposit_usd":20,"available":true},{"name":"Yamaha R3","engine_cc":321,"type":"manual","price_daily_usd":40,"price_weekly_usd":null,"price_monthly_usd":null,"deposit_usd":20,"available":true},{"name":"Yamaha Janus 125","engine_cc":125,"type":"scooter","price_daily_usd":6,"price_weekly_usd":null,"price_monthly_usd":null,"deposit_usd":20,"available":true},{"name":"Honda Air Blade","engine_cc":125,"type":"scooter","price_daily_usd":8,"price_weekly_usd":null,"price_monthly_usd":null,"deposit_usd":20,"available":true},{"name":"Yamaha NVX","engine_cc":155,"type":"scooter","price_daily_usd":8,"price_weekly_usd":null,"price_monthly_usd":null,"deposit_usd":20,"available":true},{"name":"Honda Vario","engine_cc":150,"type":"scooter","price_daily_usd":8,"price_weekly_usd":null,"price_monthly_usd":null,"deposit_usd":20,"available":true}],"notes":"Prices are converted from VND using a rate of 1 USD = 25,000 VND. Weekly/Monthly fixed prices are not listed, but the site mentions 20-30% discounts for long-term rentals. Deposit starts from 500,000 VND (~$20). Rentals include free delivery/pickup in Saigon, helmet, fuel, and insurance."}}
+

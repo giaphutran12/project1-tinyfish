@@ -1,0 +1,54 @@
+data: {"type":"STARTED","runId":"1ce5aedf-674a-4cb1-abf2-8ba9fd5d9854","timestamp":"2026-02-24T15:36:05.446Z"}
+
+data: {"type":"STREAMING_URL","runId":"1ce5aedf-674a-4cb1-abf2-8ba9fd5d9854","streamingUrl":"https://tf-f638e0a5-38d8-4263-9226-db4fdfa77f3b.lax1-tinyfish.unikraft.app/stream/0","timestamp":"2026-02-24T15:36:09.668Z"}
+
+data: {"type":"PROGRESS","runId":"1ce5aedf-674a-4cb1-abf2-8ba9fd5d9854","purpose":"Visit the website to extract motorbike rental listings.","timestamp":"2026-02-24T15:36:17.004Z"}
+
+data: {"type":"PROGRESS","runId":"1ce5aedf-674a-4cb1-abf2-8ba9fd5d9854","purpose":"Go to the rental page to see all motorbike listings.","timestamp":"2026-02-24T15:36:27.867Z"}
+
+data: {"type":"PROGRESS","runId":"1ce5aedf-674a-4cb1-abf2-8ba9fd5d9854","purpose":"Check details of Yamaha Nouvo 5.","timestamp":"2026-02-24T15:36:35.625Z"}
+
+data: {"type":"PROGRESS","runId":"1ce5aedf-674a-4cb1-abf2-8ba9fd5d9854","purpose":"Extract motorbike details from the current page.","timestamp":"2026-02-24T15:36:41.662Z"}
+
+data: {"type":"PROGRESS","runId":"1ce5aedf-674a-4cb1-abf2-8ba9fd5d9854","purpose":"Open Yamaha Nouvo 5 details.","timestamp":"2026-02-24T15:36:59.181Z"}
+
+data: {"type":"PROGRESS","runId":"1ce5aedf-674a-4cb1-abf2-8ba9fd5d9854","purpose":"Extract details for Yamaha Nouvo 5 from the popup.","timestamp":"2026-02-24T15:37:15.498Z"}
+
+data: {"type":"PROGRESS","runId":"1ce5aedf-674a-4cb1-abf2-8ba9fd5d9854","purpose":"Check long-term rental prices.","timestamp":"2026-02-24T15:37:28.982Z"}
+
+data: {"type":"PROGRESS","runId":"1ce5aedf-674a-4cb1-abf2-8ba9fd5d9854","purpose":"Visit rental page for daily/weekly prices.","timestamp":"2026-02-24T15:37:46.671Z"}
+
+data: {"type":"PROGRESS","runId":"1ce5aedf-674a-4cb1-abf2-8ba9fd5d9854","purpose":"Open Yamaha Nouvo 5 popup.","timestamp":"2026-02-24T15:38:10.874Z"}
+
+data: {"type":"PROGRESS","runId":"1ce5aedf-674a-4cb1-abf2-8ba9fd5d9854","purpose":"Extract precise rate information for Yamaha Nouvo 5 from the popup.","timestamp":"2026-02-24T15:38:21.222Z"}
+
+data: {"type":"PROGRESS","runId":"1ce5aedf-674a-4cb1-abf2-8ba9fd5d9854","purpose":"Open Honda Vision popup.","timestamp":"2026-02-24T15:38:33.426Z"}
+
+data: {"type":"PROGRESS","runId":"1ce5aedf-674a-4cb1-abf2-8ba9fd5d9854","purpose":"Extract rate information for Honda Vision from the popup.","timestamp":"2026-02-24T15:38:37.941Z"}
+
+data: {"type":"PROGRESS","runId":"1ce5aedf-674a-4cb1-abf2-8ba9fd5d9854","purpose":"Close Honda Vision popup.","timestamp":"2026-02-24T15:38:49.693Z"}
+
+data: {"type":"PROGRESS","runId":"1ce5aedf-674a-4cb1-abf2-8ba9fd5d9854","purpose":"Open Honda Airblade popup.","timestamp":"2026-02-24T15:38:55.103Z"}
+
+data: {"type":"PROGRESS","runId":"1ce5aedf-674a-4cb1-abf2-8ba9fd5d9854","purpose":"Extract rate information for Honda Airblade from the popup.","timestamp":"2026-02-24T15:39:05.858Z"}
+
+data: {"type":"PROGRESS","runId":"1ce5aedf-674a-4cb1-abf2-8ba9fd5d9854","purpose":"Close Honda Airblade popup.","timestamp":"2026-02-24T15:39:19.871Z"}
+
+data: {"type":"PROGRESS","runId":"1ce5aedf-674a-4cb1-abf2-8ba9fd5d9854","purpose":"Open Yamaha NVX popup.","timestamp":"2026-02-24T15:39:46.597Z"}
+
+data: {"type":"PROGRESS","runId":"1ce5aedf-674a-4cb1-abf2-8ba9fd5d9854","purpose":"Extract rate information for Yamaha NVX from the popup.","timestamp":"2026-02-24T15:39:52.889Z"}
+
+data: {"type":"PROGRESS","runId":"1ce5aedf-674a-4cb1-abf2-8ba9fd5d9854","purpose":"Close Yamaha NVX popup.","timestamp":"2026-02-24T15:40:04.541Z"}
+
+data: {"type":"PROGRESS","runId":"1ce5aedf-674a-4cb1-abf2-8ba9fd5d9854","purpose":"Open Yamaha NVX - 155cc popup.","timestamp":"2026-02-24T15:40:19.350Z"}
+
+data: {"type":"PROGRESS","runId":"1ce5aedf-674a-4cb1-abf2-8ba9fd5d9854","purpose":"Extract rate information for Yamaha NVX - 155cc from the popup.","timestamp":"2026-02-24T15:40:32.040Z"}
+
+data: {"type":"PROGRESS","runId":"1ce5aedf-674a-4cb1-abf2-8ba9fd5d9854","purpose":"Close Yamaha NVX - 155cc popup.","timestamp":"2026-02-24T15:40:40.665Z"}
+
+data: {"type":"PROGRESS","runId":"1ce5aedf-674a-4cb1-abf2-8ba9fd5d9854","purpose":"Open Honda PCX2 - 125cc popup.","timestamp":"2026-02-24T15:40:47.062Z"}
+
+data: {"type":"PROGRESS","runId":"1ce5aedf-674a-4cb1-abf2-8ba9fd5d9854","purpose":"Extract rate information for Honda PCX2 - 125cc from the popup.","timestamp":"2026-02-24T15:40:54.629Z"}
+
+data: {"type":"PROGRESS","runId":"1ce5aedf-674a-4cb1-abf2-8ba9fd5d9854","purpose":"Close Honda PCX2 popup.","timestamp":"2026-02-24T15:41:04.154Z"}
+

@@ -35,14 +35,20 @@ task(subagent_type='librarian', run_in_background=true, prompt='Use Nia search.s
 
 ## Background Task Handling & Context Window Protection
 
-**NEVER poll for background task results.** Use `block=true` with generous timeouts, or wait for the system notification that a task completed. When the user sends a new message, prioritize reading and responding to it immediately — do not be stuck in a polling loop.
+**NEVER use `block=true` when calling `background_output`.** Always `block=false`. No exceptions.
 
+### Why `block=true` is banned
+- The orchestrator must ALWAYS be available to receive user messages
+- No subagent runs without the orchestrator dispatching it — there is never a scenario where you're idle waiting
+- The system sends `[BACKGROUND TASK COMPLETED]` notifications — you never need to poll or wait
+- If a result isn't ready yet, move on. Do research, exploration, or just be available. Come back when notified.
+
+### Rules
 - Launch background agents with `run_in_background=true`
 - Wait for system `[BACKGROUND TASK COMPLETED]` notifications
-- Only call `background_output` after receiving the completion notification
-- If you need results before proceeding, use `block=true` with `timeout=300000` (5 min) — but prefer non-blocking when possible
+- Only call `background_output` after receiving the completion notification, ALWAYS with `block=false`
 - When the user sends a message while tasks are running, respond to the user FIRST, then collect results
-- When working on long multi-step plans, use `run_in_background=true` for parallel exploration tasks so the main agent remains free to immediately respond to new user messages — never keep the main context blocked waiting when the user could be sending input
+- When working on long multi-step plans, use `run_in_background=true` for parallel exploration tasks so the main agent remains free to immediately respond to new user messages
 
 **The main agent must NEVER do work that can be delegated to subagents.** The main agent's context window is the most precious resource — it must remain clean, available, and focused on:
 

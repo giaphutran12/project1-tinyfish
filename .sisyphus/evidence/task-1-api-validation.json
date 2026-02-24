@@ -1,0 +1,73 @@
+{
+  "validation_status": "BLOCKED",
+  "timestamp": "2026-02-24T21:00:00Z",
+  "blocker": {
+    "type": "MISSING_API_KEY",
+    "message": "Environment variable TINYFISH_API_KEY is not set",
+    "expected_var_names": [
+      "TINYFISH_API_KEY",
+      "TINY_FISH_API_KEY",
+      "MINO_API_KEY"
+    ],
+    "environment_checked": {
+      "env_command": "env | grep -i 'api|key'",
+      "result": "no matches",
+      "printenv_command": "printenv | grep -i 'api|key'",
+      "result_printenv": "no matches"
+    }
+  },
+  "test_sites": [
+    {
+      "city": "HCMC",
+      "site_name": "Wheelie Saigon",
+      "url": "https://wheelie-saigon.com/scooter-motorcycle-rental-hcmc-daily-weekly-or-monthly/",
+      "status": "NOT_TESTED",
+      "reason": "API key not available"
+    },
+    {
+      "city": "Hanoi",
+      "site_name": "Motorbike Rental in Hanoi",
+      "url": "https://motorbikerentalinhanoi.com/",
+      "status": "NOT_TESTED",
+      "reason": "API key not available"
+    },
+    {
+      "city": "Da Nang",
+      "site_name": "Hoi An Bike Rental",
+      "url": "https://hoianbikerental.com/pricing/",
+      "status": "NOT_TESTED",
+      "reason": "API key not available"
+    },
+    {
+      "city": "Nha Trang",
+      "site_name": "Motorbike Mui Ne",
+      "url": "https://motorbikemuine.com/",
+      "status": "NOT_TESTED",
+      "reason": "API key not available"
+    }
+  ],
+  "mino_api_details": {
+    "endpoint": "POST https://agent.tinyfish.ai/v1/automation/run-sse",
+    "auth_header": "X-API-Key: <TINYFISH_API_KEY>",
+    "content_type": "application/json",
+    "request_body_template": {
+      "url": "https://example.com",
+      "goal": "Extract motorbike rental pricing..."
+    },
+    "response_type": "SSE stream",
+    "sse_events": [
+      "STARTED",
+      "STREAMING_URL",
+      "PROGRESS",
+      "HEARTBEAT",
+      "COMPLETED"
+    ]
+  },
+  "next_steps": [
+    "Provide the TINYFISH_API_KEY environment variable",
+    "Confirm the correct environment variable name",
+    "Re-run validation against all 4 sites",
+    "Parse SSE responses and extract bike data",
+    "Generate validation report with results"
+  ]
+}

@@ -1,0 +1,158 @@
+{
+  "shop_name": "Wheelie Saigon",
+  "city": "HCMC",
+  "website": "https://wheelie-saigon.com/",
+  "bikes": [
+    {
+      "name": "Yamaha WR155 Super Motard",
+      "engine_cc": 155,
+      "type": "adventure",
+      "price_daily_usd": 40,
+      "price_weekly_usd": null,
+      "price_monthly_usd": null,
+      "deposit_usd": 20,
+      "available": true
+    },
+    {
+      "name": "Honda Lead 125",
+      "engine_cc": 125,
+      "type": "scooter",
+      "price_daily_usd": 8,
+      "price_weekly_usd": null,
+      "price_monthly_usd": null,
+      "deposit_usd": 20,
+      "available": true
+    },
+    {
+      "name": "Suzuki GSX-R150",
+      "engine_cc": 150,
+      "type": "manual",
+      "price_daily_usd": 20,
+      "price_weekly_usd": null,
+      "price_monthly_usd": null,
+      "deposit_usd": 20,
+      "available": true
+    },
+    {
+      "name": "Honda Scoopy 110",
+      "engine_cc": 110,
+      "type": "scooter",
+      "price_daily_usd": 6,
+      "price_weekly_usd": null,
+      "price_monthly_usd": null,
+      "deposit_usd": 20,
+      "available": true
+    },
+    {
+      "name": "Kawasaki Ninja 400",
+      "engine_cc": 400,
+      "type": "manual",
+      "price_daily_usd": 40,
+      "price_weekly_usd": null,
+      "price_monthly_usd": null,
+      "deposit_usd": 20,
+      "available": true
+    },
+    {
+      "name": "Honda Vision 110",
+      "engine_cc": 110,
+      "type": "scooter",
+      "price_daily_usd": 6,
+      "price_weekly_usd": null,
+      "price_monthly_usd": null,
+      "deposit_usd": 20,
+      "available": true
+    },
+    {
+      "name": "KTM RC390",
+      "engine_cc": 390,
+      "type": "manual",
+      "price_daily_usd": 60,
+      "price_weekly_usd": null,
+      "price_monthly_usd": null,
+      "deposit_usd": 20,
+      "available": true
+    },
+    {
+      "name": "Honda Winner 150",
+      "engine_cc": 150,
+      "type": "manual",
+      "price_daily_usd": 12,
+      "price_weekly_usd": null,
+      "price_monthly_usd": null,
+      "deposit_usd": 20,
+      "available": true
+    },
+    {
+      "name": "Yamaha Exciter 150",
+      "engine_cc": 150,
+      "type": "manual",
+      "price_daily_usd": 12,
+      "price_weekly_usd": null,
+      "price_monthly_usd": null,
+      "deposit_usd": 20,
+      "available": true
+    },
+    {
+      "name": "Honda Blade",
+      "engine_cc": 110,
+      "type": "semi-auto",
+      "price_daily_usd": 6,
+      "price_weekly_usd": null,
+      "price_monthly_usd": null,
+      "deposit_usd": 20,
+      "available": true
+    },
+    {
+      "name": "Yamaha R3",
+      "engine_cc": 321,
+      "type": "manual",
+      "price_daily_usd": 40,
+      "price_weekly_usd": null,
+      "price_monthly_usd": null,
+      "deposit_usd": 20,
+      "available": true
+    },
+    {
+      "name": "Yamaha Janus 125",
+      "engine_cc": 125,
+      "type": "scooter",
+      "price_daily_usd": 6,
+      "price_weekly_usd": null,
+      "price_monthly_usd": null,
+      "deposit_usd": 20,
+      "available": true
+    },
+    {
+      "name": "Honda Air Blade",
+      "engine_cc": 125,
+      "type": "scooter",
+      "price_daily_usd": 8,
+      "price_weekly_usd": null,
+      "price_monthly_usd": null,
+      "deposit_usd": 20,
+      "available": true
+    },
+    {
+      "name": "Yamaha NVX",
+      "engine_cc": 155,
+      "type": "scooter",
+      "price_daily_usd": 8,
+      "price_weekly_usd": null,
+      "price_monthly_usd": null,
+      "deposit_usd": 20,
+      "available": true
+    },
+    {
+      "name": "Honda Vario",
+      "engine_cc": 150,
+      "type": "scooter",
+      "price_daily_usd": 8,
+      "price_weekly_usd": null,
+      "price_monthly_usd": null,
+      "deposit_usd": 20,
+      "available": true
+    }
+  ],
+  "notes": "Prices are converted from VND using a rate of 1 USD = 25,000 VND. Weekly/Monthly fixed prices are not listed, but the site mentions 20-30% discounts for long-term rentals. Deposit starts from 500,000 VND (~$20). Rentals include free delivery/pickup in Saigon, helmet, fuel, and insurance."
+}

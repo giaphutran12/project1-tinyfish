@@ -1,0 +1,298 @@
+{
+  "shop_name": "Gia Hưng Motorbike Rental",
+  "city": "Hanoi",
+  "website": "https://motorbikerentalinhanoi.com/",
+  "bikes": [
+    {
+      "name": "Tiger 900 Rally",
+      "engine_cc": 900,
+      "type": "adventure",
+      "price_daily_usd": 115,
+      "price_weekly_usd": null,
+      "price_monthly_usd": null,
+      "deposit_usd": 2000,
+      "available": true
+    },
+    {
+      "name": "Kawasaki Versys 300cc",
+      "engine_cc": 300,
+      "type": "adventure",
+      "price_daily_usd": 45,
+      "price_weekly_usd": null,
+      "price_monthly_usd": null,
+      "deposit_usd": null,
+      "available": true
+    },
+    {
+      "name": "Honda CB500X 2023",
+      "engine_cc": 500,
+      "type": "adventure",
+      "price_daily_usd": 55,
+      "price_weekly_usd": null,
+      "price_monthly_usd": null,
+      "deposit_usd": null,
+      "available": true
+    },
+    {
+      "name": "Honda CB500X (2021)",
+      "engine_cc": 500,
+      "type": "adventure",
+      "price_daily_usd": 50,
+      "price_weekly_usd": null,
+      "price_monthly_usd": null,
+      "deposit_usd": null,
+      "available": true
+    },
+    {
+      "name": "Harley Davidson Street Bod",
+      "engine_cc": null,
+      "type": "manual",
+      "price_daily_usd": 150,
+      "price_weekly_usd": null,
+      "price_monthly_usd": null,
+      "deposit_usd": null,
+      "available": true
+    },
+    {
+      "name": "BMW GS 1250",
+      "engine_cc": 1250,
+      "type": "adventure",
+      "price_daily_usd": 185,
+      "price_weekly_usd": null,
+      "price_monthly_usd": null,
+      "deposit_usd": 3000,
+      "available": true
+    },
+    {
+      "name": "Honda XR190L",
+      "engine_cc": 190,
+      "type": "adventure",
+      "price_daily_usd": 27,
+      "price_weekly_usd": null,
+      "price_monthly_usd": null,
+      "deposit_usd": 1000,
+      "available": true
+    },
+    {
+      "name": "Honda Transalp 750cc",
+      "engine_cc": 750,
+      "type": "adventure",
+      "price_daily_usd": 150,
+      "price_weekly_usd": null,
+      "price_monthly_usd": null,
+      "deposit_usd": 2000,
+      "available": true
+    },
+    {
+      "name": "Honda Air Blade 125cc",
+      "engine_cc": 125,
+      "type": "scooter",
+      "price_daily_usd": 13,
+      "price_weekly_usd": 12,
+      "price_monthly_usd": 10,
+      "deposit_usd": 600,
+      "available": true
+    },
+    {
+      "name": "Yamaha Exciter 150cc",
+      "engine_cc": 150,
+      "type": "manual",
+      "price_daily_usd": 18,
+      "price_weekly_usd": null,
+      "price_monthly_usd": null,
+      "deposit_usd": 500,
+      "available": true
+    },
+    {
+      "name": "New Honda Wave 110cc 2019",
+      "engine_cc": 110,
+      "type": "semi-auto",
+      "price_daily_usd": 10,
+      "price_weekly_usd": null,
+      "price_monthly_usd": null,
+      "deposit_usd": null,
+      "available": true
+    },
+    {
+      "name": "Yamaha PG1",
+      "engine_cc": 115,
+      "type": "semi-auto",
+      "price_daily_usd": 15,
+      "price_weekly_usd": 13,
+      "price_monthly_usd": 10,
+      "deposit_usd": 800,
+      "available": true
+    },
+    {
+      "name": "Honda Lead 110cc",
+      "engine_cc": 110,
+      "type": "scooter",
+      "price_daily_usd": 6,
+      "price_weekly_usd": 5,
+      "price_monthly_usd": 4,
+      "deposit_usd": 100,
+      "available": true
+    },
+    {
+      "name": "New Yamaha FreeGoS 125cc ABS",
+      "engine_cc": 125,
+      "type": "scooter",
+      "price_daily_usd": 13,
+      "price_weekly_usd": 12,
+      "price_monthly_usd": 10,
+      "deposit_usd": 800,
+      "available": true
+    },
+    {
+      "name": "Attila 125cc For Rent",
+      "engine_cc": 125,
+      "type": "scooter",
+      "price_daily_usd": 6,
+      "price_weekly_usd": 5,
+      "price_monthly_usd": 4,
+      "deposit_usd": 100,
+      "available": true
+    },
+    {
+      "name": "Honda Lead 125cc For Rent",
+      "engine_cc": 125,
+      "type": "scooter",
+      "price_daily_usd": 12,
+      "price_weekly_usd": 11,
+      "price_monthly_usd": 9,
+      "deposit_usd": 800,
+      "available": true
+    },
+    {
+      "name": "Honda Vario 160cc",
+      "engine_cc": 160,
+      "type": "scooter",
+      "price_daily_usd": 18,
+      "price_weekly_usd": 15,
+      "price_monthly_usd": 13,
+      "deposit_usd": 800,
+      "available": true
+    },
+    {
+      "name": "Yamaha XMAX 300cc",
+      "engine_cc": 300,
+      "type": "scooter",
+      "price_daily_usd": 45,
+      "price_weekly_usd": 40,
+      "price_monthly_usd": 30,
+      "deposit_usd": 1000,
+      "available": true
+    },
+    {
+      "name": "Yamaha Nouvo 2002 -2010",
+      "engine_cc": null,
+      "type": "scooter",
+      "price_daily_usd": 5,
+      "price_weekly_usd": 4,
+      "price_monthly_usd": 2,
+      "deposit_usd": 100,
+      "available": true
+    },
+    {
+      "name": "New Yamaha NVX 155cc",
+      "engine_cc": 155,
+      "type": "scooter",
+      "price_daily_usd": 17,
+      "price_weekly_usd": 15,
+      "price_monthly_usd": 13,
+      "deposit_usd": 800,
+      "available": true
+    },
+    {
+      "name": "Yamaha ZTX 125cc",
+      "engine_cc": 125,
+      "type": "adventure",
+      "price_daily_usd": 17,
+      "price_weekly_usd": null,
+      "price_monthly_usd": null,
+      "deposit_usd": null,
+      "available": true
+    },
+    {
+      "name": "Kawasaki KLX 250cc",
+      "engine_cc": 250,
+      "type": "adventure",
+      "price_daily_usd": 40,
+      "price_weekly_usd": null,
+      "price_monthly_usd": null,
+      "deposit_usd": null,
+      "available": true
+    },
+    {
+      "name": "Manual Detech Win 125cc",
+      "engine_cc": 125,
+      "type": "manual",
+      "price_daily_usd": 10,
+      "price_weekly_usd": null,
+      "price_monthly_usd": null,
+      "deposit_usd": null,
+      "available": true
+    },
+    {
+      "name": "Honda XR150 Mode 2022",
+      "engine_cc": 150,
+      "type": "adventure",
+      "price_daily_usd": 25,
+      "price_weekly_usd": null,
+      "price_monthly_usd": null,
+      "deposit_usd": null,
+      "available": true
+    },
+    {
+      "name": "Honda NX500",
+      "engine_cc": 500,
+      "type": "adventure",
+      "price_daily_usd": 60,
+      "price_weekly_usd": null,
+      "price_monthly_usd": null,
+      "deposit_usd": 1500,
+      "available": true
+    },
+    {
+      "name": "Honda CRF 190L",
+      "engine_cc": 190,
+      "type": "adventure",
+      "price_daily_usd": 29,
+      "price_weekly_usd": null,
+      "price_monthly_usd": null,
+      "deposit_usd": 900,
+      "available": true
+    },
+    {
+      "name": "Honda CB150X",
+      "engine_cc": 150,
+      "type": "adventure",
+      "price_daily_usd": 30,
+      "price_weekly_usd": null,
+      "price_monthly_usd": null,
+      "deposit_usd": 900,
+      "available": true
+    },
+    {
+      "name": "New Honda Blade",
+      "engine_cc": 110,
+      "type": "semi-auto",
+      "price_daily_usd": 11,
+      "price_weekly_usd": 9,
+      "price_monthly_usd": 7,
+      "deposit_usd": null,
+      "available": true
+    },
+    {
+      "name": "Honda Future 125cc",
+      "engine_cc": 125,
+      "type": "semi-auto",
+      "price_daily_usd": 11,
+      "price_weekly_usd": null,
+      "price_monthly_usd": null,
+      "deposit_usd": null,
+      "available": true
+    }
+  ],
+  "notes": "Rental rates vary based on the duration (daily, weekly, monthly). Deposits can be made by leaving a passport or a cash amount in USD. Some motorbikes are suitable for off-road/adventure travel throughout Vietnam, while others are recommended for city use."
+}
