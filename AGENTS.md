@@ -159,6 +159,40 @@ Check the SOP for "Homer's Use Cases" bounty list:
 - Use `session_id` for retries and follow-ups (preserves context)
 - Store every `session_id` returned
 
+## ⚠️ BACKGROUND TASKS — MANDATORY RULE
+
+**NEVER use `block=true` when calling `background_output`.** Always `block=false`. No exceptions.
+
+### Why `block=true` is banned
+- The orchestrator must ALWAYS be available to receive user messages
+- No subagent runs without the orchestrator dispatching it — there is never a scenario where you're idle waiting
+- The system sends `[BACKGROUND TASK COMPLETED]` notifications — you never need to poll or wait
+- If a result isn't ready yet, move on. Do research, exploration, or just be available. Come back when notified.
+
+
+**ALWAYS use `run_in_background=true` for ALL `task()` calls.**
+
+When `run_in_background=false` (the blocking mode), the orchestrator is FROZEN.
+It cannot read messages, cannot respond to the user, cannot do anything.
+The user is left staring at a spinning cursor for minutes. This is unacceptable.
+
+**The pattern:**
+```typescript
+// Fire all independent tasks as background, stay responsive:
+const t1 = task(category='quick', run_in_background=true, prompt='...')
+const t4 = task(category='quick', run_in_background=true, prompt='...')
+const t5 = task(category='visual-engineering', run_in_background=true, prompt='...')
+
+// Collect results when needed:
+const result = background_output(task_id=t1.task_id)
+```
+
+**Rules:**
+- Fire ALL independent tasks in background simultaneously
+- After firing, immediately tell the user what tasks are running
+- Stay responsive — read user messages, answer questions while tasks run
+- Collect results with `background_output()` before delegating dependent tasks
+- Use `background_cancel(taskId=...)` to cancel specific tasks when done (NEVER `all=true`)
 ## DEBUG-FIRST DEVELOPMENT
 
 Always include server-side logging when building features:
