@@ -201,6 +201,9 @@ export async function POST(request: Request): Promise<Response> {
   const stream = new ReadableStream({
     async start(controller) {
       const encoder = new TextEncoder();
+      // Send immediate ping to establish stream and prevent proxy buffering
+      controller.enqueue(encoder.encode(': ping\n\n'));
+      
       const enqueue = (payload: unknown) => {
         controller.enqueue(encoder.encode(sseData(payload)));
       };
@@ -232,8 +235,10 @@ export async function POST(request: Request): Promise<Response> {
   return new Response(stream, {
     headers: {
       "Content-Type": "text/event-stream",
-      "Cache-Control": "no-cache",
-      Connection: "keep-alive",
+      "Cache-Control": "no-cache, no-transform",
+      "Connection": "keep-alive",
+      "X-Accel-Buffering": "no",
+      "Transfer-Encoding": "chunked",
     },
   });
 }
