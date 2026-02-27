@@ -7,6 +7,7 @@ import { Switch } from '@/components/ui/switch';
 import { useBikeSearch } from '@/hooks/use-bike-search';
 import type { Bike, BikeShop } from '@/hooks/use-bike-search';
 import { ResultsGrid } from '@/components/results-grid';
+import { LivePreviewGrid } from '@/components/live-preview-grid';
 
 const CITIES = [
   { name: 'hcmc', label: '🏙️ HCMC' },
@@ -313,6 +314,11 @@ export default function Home() {
                         </p>
                       )}
                     </div>
+                  )}
+
+                  {/* Live browser agent iframes */}
+                  {hook.state.streamingUrls.length > 0 && (
+                    <LivePreviewGrid previews={hook.state.streamingUrls} />
                   )}
 
                   {/* Loading skeletons */}

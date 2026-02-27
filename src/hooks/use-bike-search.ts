@@ -25,6 +25,12 @@ export interface BikeShop {
   cached_at?: string;
 }
 
+export interface StreamingPreview {
+  siteUrl: string;
+  streamingUrl: string;
+  done: boolean;
+}
+
 export interface SearchState {
   shops: BikeShop[];
   isSearching: boolean;
@@ -32,6 +38,7 @@ export interface SearchState {
   error: string | null;
   elapsed: string | null;
   cachedCount: number;
+  streamingUrls: StreamingPreview[];
 }
 
 const normalizeType = (raw: unknown): Bike['type'] => {
@@ -124,6 +131,7 @@ export function useBikeSearch(): {
     error: null,
     elapsed: null,
     cachedCount: 0,
+    streamingUrls: [],
   });
 
   const abortControllerRef = useRef<AbortController | null>(null);
@@ -153,6 +161,7 @@ export function useBikeSearch(): {
         error: null,
         elapsed: null,
         cachedCount: 0,
+        streamingUrls: [],
       });
 
       (async () => {
@@ -200,7 +209,19 @@ export function useBikeSearch(): {
                 continue;
               }
 
-              if (event.type === 'SHOP_RESULT') {
+              if (event.type === 'STREAMING_URL') {
+                setState((prev) => ({
+                  ...prev,
+                  streamingUrls: [
+                    ...prev.streamingUrls,
+                    {
+                      siteUrl: String(event.siteUrl || ''),
+                      streamingUrl: String(event.streamingUrl || ''),
+                      done: false,
+                    },
+                  ],
+                }));
+              } else if (event.type === 'SHOP_RESULT') {
                 const shop = normalizeShop(event.shop);
                 shop.source = (event.source as BikeShop['source']) ?? 'live';
                 shop.cached_at = event.cached_at ? String(event.cached_at) : undefined;
@@ -211,6 +232,9 @@ export function useBikeSearch(): {
                     ...prev.progress,
                     completed: prev.progress.completed + 1,
                   },
+                  streamingUrls: prev.streamingUrls.map(s =>
+                    s.siteUrl === String(event.siteUrl || '') ? { ...s, done: true } : s
+                  ),
                 }));
               } else if (event.type === 'SEARCH_COMPLETE') {
                 const total = Number(event.total ?? 0);
@@ -223,9 +247,9 @@ export function useBikeSearch(): {
                   elapsed,
                   cachedCount,
                 }));
-              }
             }
           }
+        }
         } catch (err) {
           if (err instanceof Error && err.name === 'AbortError') {
             // User aborted, don't set error

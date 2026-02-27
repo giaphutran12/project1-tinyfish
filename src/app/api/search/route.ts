@@ -231,6 +231,7 @@ async function runMinoSseForSite(
 
         if (event.streamingUrl) {
           console.log("[MINO] streamingUrl", event.streamingUrl);
+          enqueue({ type: "STREAMING_URL", siteUrl: url, streamingUrl: event.streamingUrl });
         }
 
         if (event.status === "COMPLETED") {
@@ -242,6 +243,7 @@ async function runMinoSseForSite(
     if (resultJson) {
       enqueue({
         type: "SHOP_RESULT",
+        siteUrl: url,
         shop: resultJson,
       });
       console.log(`[MINO] Complete: ${url} (${elapsedSeconds(startedAt)}s)`);
