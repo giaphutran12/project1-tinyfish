@@ -12,7 +12,8 @@ Rental shops in Vietnam don't list prices on any aggregator. You have to visit 5
 
 - Search up to **4 cities at once** — HCMC, Hanoi, Da Nang, Nha Trang
 - Filter by **bike type** — Scooter, Semi-Auto, Manual, Adventure
-- Watch **live browser agent iframes** as Mino scrapes each shop
+- **Sort by price** (low→high or high→low) and **filter by model name** (Honda, Vespa, Yamaha, etc.)
+- Watch **live browser agent iframes** — all agent windows shown in parallel by default
 - Toggle between **live scraping** and **cached results** (6-hour TTL)
 - Results stream in as each shop completes — no waiting for the slowest one
 
@@ -117,7 +118,7 @@ Results are cached in Supabase with a 6-hour TTL, keyed by `(city, website)`. Th
 
 ## Live browser agent iframes
 
-When a live scrape is running, Mino returns a `streamingUrl` for each agent — a real browser session you can watch in an iframe. The UI shows the most recent active agent by default, with an expand button to see up to 6 agents in a grid.
+When a live scrape is running, Mino returns a `streamingUrl` for each agent — a real browser session you can watch in an iframe. All active agent windows are shown in parallel by default, with a collapse button to minimize the grid.
 
 ---
 
@@ -126,12 +127,12 @@ When a live scrape is running, Mino returns a `streamingUrl` for each agent — 
 ```
 src/
 ├── app/
-│   ├── page.tsx              # Main UI — city/type selection, results, iframes
+│   ├── page.tsx              # Main UI — city/type selection, sort/filter toolbar, results, iframes
 │   └── api/search/route.ts   # SSE endpoint — cache lookup + Mino orchestration
 ├── hooks/
 │   └── use-bike-search.ts    # SSE client, state management, StreamingPreview type
 └── components/
-    ├── live-preview-grid.tsx  # Live iframe grid (1 default, expand to 6)
+    ├── live-preview-grid.tsx  # Live iframe grid (all shown by default, collapsible)
     ├── results-grid.tsx       # Shop cards grouped by store
     ├── shop-group.tsx         # Individual shop section
     └── bike-card.tsx          # Single bike listing card
