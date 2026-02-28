@@ -14,7 +14,7 @@ interface LivePreviewGridProps {
 }
 
 export function LivePreviewGrid({ previews }: LivePreviewGridProps) {
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState(true);
 
   if (previews.length === 0) return null;
 

@@ -39,6 +39,38 @@ function filterShops(shops: BikeShop[], types: Set<Bike['type']>): BikeShop[] {
     .filter(shop => shop.bikes.length > 0);
 }
 
+type SortOrder = 'none' | 'price-asc' | 'price-desc';
+
+function applySortAndFilter(shops: BikeShop[], sortOrder: SortOrder, modelFilter: string): BikeShop[] {
+  let result = shops;
+
+  // Filter by model name (case-insensitive partial match)
+  if (modelFilter.trim()) {
+    const q = modelFilter.trim().toLowerCase();
+    result = result
+      .map(shop => ({ ...shop, bikes: shop.bikes.filter(b => b.name.toLowerCase().includes(q)) }))
+      .filter(shop => shop.bikes.length > 0);
+  }
+
+  // Sort bikes within each shop by price, then sort shops by cheapest bike
+  if (sortOrder !== 'none') {
+    const priceOf = (b: Bike) => b.price_daily_usd ?? (sortOrder === 'price-asc' ? Infinity : -Infinity);
+    const cmp = sortOrder === 'price-asc'
+      ? (a: Bike, b: Bike) => priceOf(a) - priceOf(b)
+      : (a: Bike, b: Bike) => priceOf(b) - priceOf(a);
+
+    result = result
+      .map(shop => ({ ...shop, bikes: [...shop.bikes].sort(cmp) }))
+      .sort((a, b) => {
+        const pa = a.bikes[0] ? priceOf(a.bikes[0]) : Infinity;
+        const pb = b.bikes[0] ? priceOf(b.bikes[0]) : Infinity;
+        return sortOrder === 'price-asc' ? pa - pb : pb - pa;
+      });
+  }
+
+  return result;
+}
+
 export default function Home() {
   // 4 fixed hook instances — React rules: hooks must be called unconditionally
   const hook0 = useBikeSearch();
@@ -57,6 +89,8 @@ export default function Home() {
   const [typeSets, setTypeSets] = useState<Set<Bike['type']>[]>([new Set(), new Set(), new Set(), new Set()]);
   const [triggered, setTriggered] = useState<boolean[]>([false, false, false, false]);
   const [useCache, setUseCache] = useState(false);
+  const [sortOrder, setSortOrder] = useState<SortOrder>('none');
+  const [modelFilter, setModelFilter] = useState('');
 
   const slotCount    = activeSlotHookIndices.length;
   const anySearching = activeSlotHookIndices.some(hi => allHooks[hi].state.isSearching);
@@ -255,12 +289,49 @@ export default function Home() {
         </div>
 
         {/* Per-slot results */}
+        {/* Sort & filter toolbar — only show when there are results */}
+        {anyTriggered && activeSlotHookIndices.some(hi => allHooks[hi].state.shops.length > 0) && (
+          <div className="flex flex-wrap items-center gap-3 py-3 px-4 bg-zinc-50 rounded-xl border border-zinc-100">
+            <div className="flex items-center gap-1.5">
+              <span className="text-xs font-semibold text-zinc-400 uppercase tracking-wide">Sort</span>
+              {(['none', 'price-asc', 'price-desc'] as SortOrder[]).map(order => (
+                <Button
+                  key={order}
+                  variant={sortOrder === order ? 'default' : 'outline'}
+                  size="sm"
+                  className="h-7 text-xs"
+                  onClick={() => setSortOrder(order)}
+                >
+                  {order === 'none' ? 'Default' : order === 'price-asc' ? '$ Low → High' : '$ High → Low'}
+                </Button>
+              ))}
+            </div>
+            <div className="flex-1 min-w-[180px]">
+              <input
+                type="text"
+                placeholder="Filter by model (e.g. Honda, Vespa…)"
+                value={modelFilter}
+                onChange={e => setModelFilter(e.target.value)}
+                className="w-full h-7 px-3 text-xs rounded-md border border-zinc-200 bg-white text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-300 transition-shadow"
+              />
+            </div>
+            {(sortOrder !== 'none' || modelFilter) && (
+              <button
+                onClick={() => { setSortOrder('none'); setModelFilter(''); }}
+                className="text-xs text-zinc-400 hover:text-zinc-600 transition-colors"
+              >
+                ✕ Clear
+              </button>
+            )}
+          </div>
+        )}
+
         {anyTriggered ? (
           <div className="flex flex-col gap-12">
             {activeSlotHookIndices.map((hi, slotPos) => {
               if (!triggered[hi]) return null;
               const hook       = allHooks[hi];
-              const filtered   = filterShops(hook.state.shops, typeSets[hi]);
+              const filtered   = applySortAndFilter(filterShops(hook.state.shops, typeSets[hi]), sortOrder, modelFilter);
               const noMatches  = typeSets[hi].size > 0 && hook.state.shops.length > 0 && filtered.length === 0;
               const cityLabel  = cities[hi] ? CITY_LABELS[cities[hi]!] : '';
               const typeLabel  = Array.from(typeSets[hi]).join(', ');
