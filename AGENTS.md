@@ -23,9 +23,10 @@ TinyFish built **Mino** — a web agent API. You give it:
 It returns structured JSON with exactly what you asked for.
 
 **Mino's superpowers:**
-- Parallel browser automation (10-50+ sites simultaneously)
+- Parallel browser automation (10-50+ sites simultaneously, scales to 1000+)
 - AI-powered navigation through complex sites (multi-step forms, nested menus, dynamic loading)
 - Works on niche sites that have NO API
+- **No rate limits, no concurrency caps, no throughput limits** — Mino is designed for massive parallelism. NEVER add artificial staggering, throttling, or request delays in our code.
 
 **Mino API docs are indexed in Nia** (source: `123d2659-98bb-4843-8a26-f6c6f4c09a30`).
 

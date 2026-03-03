@@ -92,7 +92,7 @@ export function LivePreviewGrid({ previews }: LivePreviewGridProps) {
               src={streamingUrl}
               className={`w-full border-0 bg-zinc-50 ${expanded ? 'h-44' : 'h-72'}`}
               title={`Mino agent: ${getHostname(siteUrl)}`}
-              loading="lazy"
+              loading="eager"
             />
           </div>
         ))}

@@ -6,7 +6,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 
 const MINO_SSE_URL = "https://agent.tinyfish.ai/v1/automation/run-sse";
 const REQUEST_TIMEOUT_MS = 780_000;
-const REQUEST_STAGGER_MS = 500;
+const REQUEST_STAGGER_MS = 0;
 const CACHE_TTL_MS = 6 * 60 * 60 * 1000; // 6 hours
 
 const CITY_SITES: Record<string, string[]> = {
@@ -340,8 +340,6 @@ export async function POST(request: Request): Promise<Response> {
       if (uncachedSites.length > 0) {
         const tasks = uncachedSites.map((url, index) =>
           (async () => {
-            await sleep(index * REQUEST_STAGGER_MS);
-
             // Per-site enqueue wrapper: adds source + fires cache upsert
             const siteEnqueue = (payload: unknown) => {
               const event = payload as Record<string, unknown>;
