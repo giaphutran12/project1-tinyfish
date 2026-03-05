@@ -5,11 +5,12 @@
 The Vietnam Bike Price Scout is a real-time price comparison tool for motorbike rentals in Vietnam. It solves the problem of fragmented pricing information by aggregating data from multiple local rental shops that lack public APIs.
 
 ### How it works:
-1. **User Input**: The user selects a city (e.g., Ho Chi Minh City, Hanoi).
-2. **Parallel Extraction**: The Next.js backend triggers multiple TinyFish Mino API calls in parallel, one for each known rental shop in that city.
-3. **Real-time Streaming**: Using Server-Sent Events (SSE), the backend streams results back to the frontend as soon as each shop's data is extracted.
-4. **Data Normalization**: The frontend receives the raw JSON from Mino, normalizes currency (VND to USD), and updates the UI dynamically.
-5. **Visual Comparison**: Users can filter and sort bikes by type (scooter, manual, etc.) and price to find the best deal.
+1. **User Input**: The user selects up to 4 cities in parallel (HCMC, Hanoi, Da Nang, Nha Trang) and chooses bike types (scooter, semi-auto, manual, adventure).
+2. **Cache Check**: The API route checks Supabase for cached results (6-hour TTL). Cached shops stream instantly; only uncached shops trigger Mino.
+3. **Parallel Extraction**: The Next.js backend triggers multiple TinyFish Mino API calls in parallel (zero stagger), one for each known rental shop in that city.
+4. **Real-time Streaming**: Using Server-Sent Events (SSE), the backend streams results and live browser iframe URLs back to the frontend as each agent progresses.
+5. **Data Normalization**: The frontend normalizes currency (VND to USD at 25,000:1), classifies bike types, and updates the UI dynamically.
+6. **Visual Comparison**: Users can sort by price (low→high, high→low), filter by model name, and watch live Mino browser agents (up to 5 iframes per search).
 
 ---
 
@@ -19,29 +20,32 @@ This snippet from `src/app/api/search/route.ts` demonstrates how to proxy Mino's
 
 ```typescript
 // src/app/api/search/route.ts
-export const runtime = "edge";
+export const runtime = "nodejs"; // Required for long-running SSE streams (up to 800s on Vercel Pro)
 
 const MINO_SSE_URL = "https://agent.tinyfish.ai/v1/automation/run-sse";
 
-async function runMinoSseForSite(url: string, apiKey: string, enqueue: (payload: unknown) => void) {
+async function runMinoSseForSite(
+  url: string,
+  apiKey: string,
+  enqueue: (payload: unknown) => void,
+): Promise<boolean> {
   const response = await fetch(MINO_SSE_URL, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       Accept: "text/event-stream",
-      "X-API-Key": apiKey,
+      "X-API-Key": apiKey, // env var: TINYFISH_API_KEY
     },
-    body: JSON.stringify({
-      url,
-      goal: GOAL_PROMPT,
-    }),
+    body: JSON.stringify({ url, goal: GOAL_PROMPT }),
   });
 
   if (!response.ok || !response.body) return false;
 
+  // MUST use getReader() + buffer pattern for SSE — never await response.text()
   const reader = response.body.getReader();
   const decoder = new TextDecoder();
   let buffer = "";
+  let resultJson: unknown;
 
   while (true) {
     const { done, value } = await reader.read();
@@ -54,12 +58,22 @@ async function runMinoSseForSite(url: string, apiKey: string, enqueue: (payload:
     for (const line of lines) {
       if (!line.startsWith("data: ")) continue;
       const event = JSON.parse(line.slice(6));
-      if (event.status === "COMPLETED" && event.resultJson) {
-        enqueue({ type: "SHOP_RESULT", shop: event.resultJson });
+
+      // Forward live browser iframe URL to client
+      if (event.streamingUrl) {
+        enqueue({ type: "STREAMING_URL", siteUrl: url, streamingUrl: event.streamingUrl });
+      }
+      if (event.status === "COMPLETED") {
+        resultJson = event.resultJson;
       }
     }
   }
-  return true;
+
+  if (resultJson) {
+    enqueue({ type: "SHOP_RESULT", siteUrl: url, shop: resultJson });
+    return true;
+  }
+  return false;
 }
 ```
 

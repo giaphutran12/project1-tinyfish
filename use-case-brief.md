@@ -38,8 +38,8 @@ Users select a city (HCMC, Hanoi, Da Nang, Hoi An, Nha Trang) and bike type (sco
 | Motorbike Rental Hanoi | https://motorbikerentalinhanoi.com/ | Yes — USD/day per model | Simple listing |
 | Offroad Vietnam | https://offroadvietnam.com/ | Yes — scooter + adventure rates | Multi-step (tour vs rental) |
 | Rent Bike Hanoi | https://rentbikehanoi.com/ | Yes — daily rates | Simple listing |
-| Book2Wheel | https://book2wheel.com/activity/motorcycle-rental-hanoi | Yes — per-bike USD pricing | Multi-step (date picker, login) |
-| MotoVina | https://motorvina.com/en/motorbike-rental/ | Yes — city-based, USD/VND toggle | Multi-step (city, dates, model) |
+| Book2Wheel | https://book2wheel.com | Yes — per-bike USD pricing | Multi-step (date picker, login) |
+| MotoVina | https://motorvina.com | Yes — city-based, USD/VND toggle | Multi-step (city, dates, model) |
 
 ### Da Nang / Hoi An
 | Site | URL | Pricing Visible | Complexity |
@@ -65,47 +65,48 @@ Users select a city (HCMC, Hanoi, Da Nang, Hoi An, Nha Trang) and bike type (sco
 
 ```
 ┌─────────────────────────────────────────────────┐
-│  User Interface (Next.js + Tailwind)            │
-│  - City selector (HCMC, Hanoi, Da Nang, etc.)   │
+│  User Interface (Next.js + Tailwind + shadcn/ui)│
+│  - Up to 4 parallel city search slots           │
 │  - Bike type filter (scooter, semi-auto, etc.)  │
-│  - Duration toggle (daily/weekly/monthly)        │
+│  - Sort by price + filter by model name         │
+│  - Live browser agent iframes (max 5 per search)│
 └────────────────────┬────────────────────────────┘
-                     │ User clicks "Search"
+                     │ User clicks "Search All"
                      ▼
 ┌─────────────────────────────────────────────────┐
-│  Next.js API Route (/api/search)                │
-│  - Builds Mino requests for selected city       │
-│  - Fires 10-18 parallel Mino calls              │
+│  Next.js API Route (/api/search)  [Node.js]     │
+│  - Check Supabase cache (6h TTL)                │
+│  - Stream cached results instantly via SSE      │
+│  - Fire parallel Mino calls for uncached sites  │
+│  - Cache-before-stream: persist before sending  │
 │  - Uses Promise.allSettled() for fault tolerance │
-└────────────────────┬────────────────────────────┘
-                     │ 10-18 parallel requests
-                     ▼
-┌─────────────────────────────────────────────────┐
-│  TinyFish Mino API (SSE Streaming)              │
-│                                                  │
-│  Agent 1  → tigitmotorbikes.com        ─┐       │
-│  Agent 2  → theextramile.co            ─┤       │
-│  Agent 3  → wheelie-saigon.com         ─┤       │
-│  Agent 4  → saigonmotorcycles.com      ─┤ SSE   │
-│  Agent 5  → stylemotorbikes.com        ─┤ streams│
-│  ...                                   ─┤       │
-│  Agent N  → motorbikemuine.com         ─┘       │
-│                                                  │
-└────────────────────┬────────────────────────────┘
-                     │ Streamed results (real-time)
-                     ▼
+└────────┬────────────────────────┬───────────────┘
+         │ Cached hits            │ Uncached sites
+         ▼                        ▼
+┌────────────────┐  ┌────────────────────────────┐
+│  Supabase      │  │  TinyFish Mino API (SSE)   │
+│  (PostgreSQL)  │  │                             │
+│  6h TTL cache  │  │  Agent 1 → site1.com  ─┐   │
+│  keyed by      │  │  Agent 2 → site2.com  ─┤   │
+│  (city,website)│  │  Agent N → siteN.com  ─┘   │
+└────────────────┘  │  Zero stagger, parallel    │
+                    │  STREAMING_URL + COMPLETED  │
+                    └────────────┬───────────────┘
+                                 │ SSE stream
+                                 ▼
 ┌─────────────────────────────────────────────────┐
 │  Results Dashboard                               │
 │  - Cards populate as each agent completes        │
-│  - Sorted by price (cheapest first)              │
-│  - Filterable by bike type, duration, deposit    │
-│  - "Book Now" links to original rental site      │
+│  - Sort by price (low→high, high→low)           │
+│  - Filter by model name (Honda, Vespa, etc.)    │
+│  - Clickable cards → original rental site       │
+│  - Live iframe grid (active only, auto-cleanup) │
 └─────────────────────────────────────────────────┘
 ```
 
-**API calls per search**: 10-18 Mino SSE calls (one per rental site in the selected city), fired in parallel via `Promise.allSettled()`.
+**API calls per search**: 2-6 Mino SSE calls (one per uncached rental site in the selected city), fired in parallel with zero stagger via `Promise.allSettled()`.
 
-**Why SSE streaming**: Results appear in real-time as each agent finishes — the user watches bikes populate the dashboard live. This is the best UX for demos and showcases Mino's parallel power visually.
+**Why SSE streaming**: Results appear in real-time as each agent finishes — the user watches bikes populate the dashboard live. Live browser agent iframes show Mino navigating each site in real time. This is the best UX for demos and showcases Mino's parallel power visually.
 
 ---
 
@@ -229,116 +230,78 @@ Extract up to 20 bikes maximum.
 
 ---
 
-## Code Snippet (TypeScript — Next.js API Route)
+## Code Snippet (TypeScript — Next.js SSE API Route)
 
 ```typescript
-// /api/search/route.ts
-import { NextRequest, NextResponse } from "next/server";
+// src/app/api/search/route.ts — Simplified (see full source for cache + error handling)
+export const runtime = "nodejs";
+export const maxDuration = 800;
 
-const MINO_API_URL = "https://mino.ai/v1/automation/run-sse";
+const MINO_SSE_URL = "https://agent.tinyfish.ai/v1/automation/run-sse";
 
 const CITY_SITES: Record<string, string[]> = {
-  "hcmc": [
+  hcmc: [
     "https://www.tigitmotorbikes.com/prices",
-    "https://theextramile.co/city-rental-prices/",
     "https://wheelie-saigon.com/scooter-motorcycle-rental-hcmc-daily-weekly-or-monthly/",
     "https://saigonmotorcycles.com/rentals/",
-    "https://stylemotorbikes.com/",
+    "https://stylemotorbikes.com",
+    "https://theextramile.co/city-rental-prices/",
   ],
-  "hanoi": [
+  hanoi: [
     "https://motorbikerentalinhanoi.com/",
-    "https://offroadvietnam.com/",
-    "https://rentbikehanoi.com/",
-    "https://book2wheel.com/activity/motorcycle-rental-hanoi",
-    "https://motorvina.com/en/motorbike-rental/",
+    "https://offroadvietnam.com",
+    "https://rentbikehanoi.com",
+    "https://book2wheel.com",
+    "https://motorvina.com",
   ],
-  "danang": [
+  danang: [
     "https://motorbikerentaldanang.com/",
-    "https://danangmotorbikesrental.com/",
-    "https://danangbike.com/",
-    "https://motorbikerentalhoian.com/",
+    "https://danangmotorbikesrental.com",
+    "https://danangbike.com",
+    "https://motorbikerentalhoian.com",
     "https://hoianbikerental.com/pricing/",
+    "https://tuanmotorbike.com",
   ],
-  "nhatrang": [
+  nhatrang: [
     "https://moto4free.com/",
     "https://motorbikemuine.com/",
   ],
 };
 
-const GOAL = `You are extracting motorbike/scooter rental pricing from this rental shop website.
-// ... (full prompt from above)
-`;
+export async function POST(request: Request): Promise<Response> {
+  const { city, useCache } = await request.json();
+  const sites = CITY_SITES[city];
+  const apiKey = process.env.TINYFISH_API_KEY!;
 
-async function scrapeShop(url: string): Promise<any> {
-  const response = await fetch(MINO_API_URL, {
-    method: "POST",
-    headers: {
-      "X-API-Key": process.env.MINO_API_KEY!,
-      "Content-Type": "application/json",
+  // SSE streaming response — results flow to client as agents complete
+  const stream = new ReadableStream({
+    async start(controller) {
+      const encoder = new TextEncoder();
+      const enqueue = (payload: unknown) =>
+        controller.enqueue(encoder.encode(`data: ${JSON.stringify(payload)}\n\n`));
+
+      // Optionally stream cached results instantly from Supabase
+      // ... (cache-aside pattern, see full source)
+
+      // Fire ALL Mino requests in parallel — zero stagger, zero rate limits
+      const tasks = sites.map((url) =>
+        (async () => {
+          // Each agent call uses getReader() + buffer pattern for SSE
+          // Forwards STREAMING_URL events (live browser iframes) to client
+          // On COMPLETED: caches result to Supabase, then streams SHOP_RESULT
+          return runMinoSseForSite(url, apiKey, enqueue);
+        })()
+      );
+      await Promise.allSettled(tasks);
+
+      enqueue({ type: "SEARCH_COMPLETE", total: sites.length });
+      controller.close();
     },
-    body: JSON.stringify({ url, goal: GOAL }),
   });
 
-  if (!response.ok) {
-    if (response.status === 429) throw new Error("RATE_LIMITED");
-    throw new Error(`Mino API error: ${response.status}`);
-  }
-
-  // Parse SSE stream
-  const text = await response.text();
-  const lines = text.split("\n").filter((l) => l.startsWith("data: "));
-  const lastEvent = JSON.parse(lines[lines.length - 1].replace("data: ", ""));
-
-  if (lastEvent.streamingUrl) {
-    console.log(`[MINO] Live browser: ${lastEvent.streamingUrl}`);
-  }
-
-  if (lastEvent.status === "COMPLETED" && lastEvent.resultJson) {
-    return lastEvent.resultJson;
-  }
-  return null;
-}
-
-async function scrapeWithRetry(url: string, retries = 2): Promise<any> {
-  for (let i = 0; i <= retries; i++) {
-    try {
-      return await scrapeShop(url);
-    } catch (e: any) {
-      if (e.message === "RATE_LIMITED" && i < retries) {
-        console.log(`[MINO] Rate limited on ${url}, retrying in ${2 ** i}s...`);
-        await new Promise((r) => setTimeout(r, 2 ** i * 1000));
-        continue;
-      }
-      console.error(`[MINO] Failed ${url}:`, e.message);
-      return null;
-    }
-  }
-}
-
-export async function POST(request: NextRequest) {
-  const { city } = await request.json();
-  const sites = CITY_SITES[city];
-
-  if (!sites) {
-    return NextResponse.json({ error: "Invalid city" }, { status: 400 });
-  }
-
-  console.log(`[MINO] Searching ${sites.length} shops in ${city}...`);
-  const startTime = Date.now();
-
-  // Fire ALL requests in parallel
-  const results = await Promise.allSettled(
-    sites.map((url) => scrapeWithRetry(url))
-  );
-
-  const shops = results
-    .filter((r) => r.status === "fulfilled" && r.value !== null)
-    .map((r) => (r as PromiseFulfilledResult<any>).value);
-
-  const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
-  console.log(`[MINO] Done. ${shops.length}/${sites.length} shops returned data in ${elapsed}s`);
-
-  return NextResponse.json({ shops, city, elapsed, total_sites: sites.length });
+  return new Response(stream, {
+    headers: { "Content-Type": "text/event-stream", "Cache-Control": "no-cache" },
+  });
 }
 ```
 
@@ -346,20 +309,22 @@ export async function POST(request: NextRequest) {
 
 ## What Makes This Use Case Stand Out
 
-1. **Parallel Scale**: 10-18 sites scraped simultaneously — the core Mino advantage, visually demonstrated as results stream in real-time
+1. **Parallel Scale**: Up to 18 sites scraped simultaneously across 4 cities at once — the core Mino advantage, visually demonstrated as results stream in real-time
 2. **Zero API Territory**: Not a single rental shop has an API — this is impossible without a web agent
 3. **Vietnam-Specific**: Leverages local market knowledge that no other applicant has. Vietnam = uncovered category in the Use Case Library
 4. **Real Utility**: Millions of tourists visit Vietnam annually. Every single one rents a motorbike. This solves a daily pain point
 5. **Complex Navigation**: Multi-step booking forms, currency switchers, pagination — showcases Mino's AI navigation vs. simple scrapers
-6. **Visual Demo**: Cards populating in real-time as agents complete = compelling demo video
+6. **Visual Demo**: Live browser agent iframes show Mino navigating in real-time + cards populating as agents complete = compelling demo video
 7. **No Anti-Bot Risk**: These are small WordPress/Wix sites with zero bot protection — most reliable demo possible
+8. **Smart Caching**: Supabase cache with 6h TTL means repeat searches are instant — graceful degradation if Supabase is unavailable
 
 ---
 
 ## Tech Stack
 - **Frontend**: Next.js 16 + React 19 + Tailwind CSS v4 + shadcn/ui
-- **API**: TinyFish Mino SSE streaming endpoint
-- **Hosting**: Vercel (free tier)
+- **API**: TinyFish Mino SSE streaming endpoint (`https://agent.tinyfish.ai/v1/automation/run-sse`)
+- **Caching**: Supabase (PostgreSQL) — 6h TTL, graceful degradation
+- **Hosting**: Vercel (800s max duration, Node.js runtime)
 - **Build Tool**: Claude Code
 
 ## Estimated Build Time

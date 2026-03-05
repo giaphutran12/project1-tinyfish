@@ -33,51 +33,30 @@ The app sends one Mino SSE request per rental website. Each request tells Mino t
 4. Extract every bike listing with name, engine size, type, and price
 5. Return structured JSON
 
-All requests run **in parallel** (staggered 500ms apart to avoid overwhelming the API). Results stream back to the browser via Server-Sent Events — so you see shops populate one by one as agents finish.
+All requests run **in parallel** with zero stagger — Mino is designed for massive parallelism with no rate limits. Results stream back to the browser via Server-Sent Events — so you see shops populate one by one as agents finish.
 
 ### Code Snippet — SSE Fan-Out Pattern
 
 From `src/app/api/search/route.ts`:
 
 ```typescript
-// Fan out parallel Mino requests — one per rental website
-const tasks = uncachedSites.map((url, index) =>
+// Fan out parallel Mino requests — one per rental website, zero stagger
+const tasks = uncachedSites.map((url) =>
   (async () => {
-    await sleep(index * REQUEST_STAGGER_MS); // stagger 500ms
-
-    const response = await fetch(MINO_SSE_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "text/event-stream",
-        "X-API-Key": apiKey,
-      },
-      body: JSON.stringify({ url, goal: GOAL_PROMPT }),
-    });
-
-    // Parse SSE stream with getReader() + buffer pattern
-    const reader = response.body!.getReader();
-    const decoder = new TextDecoder();
-    let buffer = "";
-
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-
-      buffer += decoder.decode(value, { stream: true });
-      const lines = buffer.split("\n");
-      buffer = lines.pop() ?? "";
-
-      for (const line of lines) {
-        if (!line.startsWith("data: ")) continue;
-        const event = JSON.parse(line.slice(6));
-        if (event.status === "COMPLETED" && event.resultJson) {
-          // Cache result to Supabase, then stream to client
-          await cacheResult(supabase, city, url, event.resultJson);
-          enqueue({ type: "SHOP_RESULT", shop: event.resultJson });
+    const siteEnqueue = (payload: unknown) => {
+      const event = payload as Record<string, unknown>;
+      if (event.type === "SHOP_RESULT") {
+        // Cache FIRST — must persist even if client disconnected
+        if (supabase && useCache && event.shop) {
+          cacheResult(supabase, city, url, event.shop).catch(() => {});
         }
+        enqueue({ ...event, source: "live" });
+      } else {
+        enqueue(payload); // Forward STREAMING_URL events for live iframes
       }
-    }
+    };
+
+    return runMinoSseForSite(url, apiKey, siteEnqueue);
   })()
 );
 
@@ -151,8 +130,8 @@ Real data extracted from Wheelie Saigon (HCMC):
 ### Step 1: Clone and install
 
 ```bash
-git clone https://github.com/giaphutran12/project1-tinyfish.git
-cd project1-tinyfish
+git clone https://github.com/tinyfish-io/tinyfish-cookbook.git
+cd tinyfish-cookbook/vietnam-bike-price-scout
 npm install
 ```
 
@@ -193,7 +172,7 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ### Step 4: Try it out
 
-1. **Select a city** from the dropdown (start with Da Nang — it's fastest, ~55 seconds)
+1. **Select a city** (start with Da Nang — it's fastest, ~55 seconds). You can add up to **4 parallel city searches**
 2. **Click Search** and watch the progress bar fill as Mino agents scrape each website
 3. **Results appear in real-time** — each shop card pops in as its agent finishes
 4. **Search the same city again** — if Supabase is configured, cached results appear instantly with a ⚡ badge
@@ -235,7 +214,7 @@ graph TD
 - **Cache-aside pattern**: Check Supabase first → stream cached results immediately → only scrape uncached sites via Mino → upsert results after each success
 - **Cache-before-stream**: Results are written to Supabase _before_ being streamed to the client, so if a user closes their browser mid-search, completed shops are still cached
 - **Graceful degradation**: If Supabase env vars are missing, the app works identically — it just skips caching and always scrapes live
-- **500ms stagger**: Requests to Mino are staggered to avoid overwhelming the API queue
+- **Zero stagger**: Requests to Mino fire simultaneously — Mino is designed for massive parallelism with no rate limits or concurrency caps
 
 ---
 

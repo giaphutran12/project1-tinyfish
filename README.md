@@ -13,7 +13,7 @@ Rental shops in Vietnam don't list prices on any aggregator. You have to visit 5
 - Search up to **4 cities at once** — HCMC, Hanoi, Da Nang, Nha Trang
 - Filter by **bike type** — Scooter, Semi-Auto, Manual, Adventure
 - **Sort by price** (low→high or high→low) and **filter by model name** (Honda, Vespa, Yamaha, etc.)
-- Watch **live browser agent iframes** — all agent windows shown in parallel by default
+- Watch **live browser agent iframes** — up to 5 active agent windows per search, auto-removed when done
 - Toggle between **live scraping** and **cached results** (6-hour TTL)
 - Results stream in as each shop completes — no waiting for the slowest one
 
@@ -29,7 +29,7 @@ POST /api/search
        │
        ├── Cache hit? → stream result instantly via SSE
        │
-       └── Cache miss? → fire Mino SSE request for each shop (staggered 500ms)
+       └── Cache miss? → fire Mino SSE requests for all shops in parallel
                               │
                               ├── STREAMING_URL event → forward iframe URL to client
                               │
@@ -118,7 +118,7 @@ Results are cached in Supabase with a 6-hour TTL, keyed by `(city, website)`. Th
 
 ## Live browser agent iframes
 
-When a live scrape is running, Mino returns a `streamingUrl` for each agent — a real browser session you can watch in an iframe. All active agent windows are shown in parallel by default, with a collapse button to minimize the grid.
+When a live scrape is running, Mino returns a `streamingUrl` for each agent — a real browser session you can watch in an iframe. Up to 5 active agent windows are shown per search (deduped by site, capped to prevent browser overload). Done iframes are automatically removed from the DOM to free memory. A collapse button lets you minimize the grid.
 
 ---
 
@@ -132,7 +132,7 @@ src/
 ├── hooks/
 │   └── use-bike-search.ts    # SSE client, state management, StreamingPreview type
 └── components/
-    ├── live-preview-grid.tsx  # Live iframe grid (all shown by default, collapsible)
+    ├── live-preview-grid.tsx  # Live iframe grid (max 5 active per search, auto-cleanup)
     ├── results-grid.tsx       # Shop cards grouped by store
     ├── shop-group.tsx         # Individual shop section
     └── bike-card.tsx          # Single bike listing card
