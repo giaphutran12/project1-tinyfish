@@ -16,25 +16,25 @@ You are helping a developer land a Product Growth Intern role at TinyFish ($47M 
 
 ## WHAT TINYFISH / MINO IS
 
-TinyFish built **Mino** — a web agent API. You give it:
+TinyFish is a web agent API. You give it:
 - A URL
 - A natural language goal
 
 It returns structured JSON with exactly what you asked for.
 
-**Mino's superpowers:**
+**TinyFish's superpowers:**
 - Parallel browser automation (10-50+ sites simultaneously, scales to 1000+)
 - AI-powered navigation through complex sites (multi-step forms, nested menus, dynamic loading)
 - Works on niche sites that have NO API
-- **No rate limits, no concurrency caps, no throughput limits** — Mino is designed for massive parallelism. NEVER add artificial staggering, throttling, or request delays in our code.
+- **No rate limits, no concurrency caps, no throughput limits** — TinyFish is designed for massive parallelism. NEVER add artificial staggering, throttling, or request delays in our code.
 
-**Mino API docs are indexed in Nia** (source: `123d2659-98bb-4843-8a26-f6c6f4c09a30`).
+**TinyFish API docs are indexed in Nia** (source: `123d2659-98bb-4843-8a26-f6c6f4c09a30`).
 
 ## NIA INDEXED SOURCES (ALREADY AVAILABLE)
 
 | Source | Nia ID | What's In It |
 |--------|--------|-------------|
-| TinyFish API Docs | `123d2659-98bb-4843-8a26-f6c6f4c09a30` | Full Mino API reference, auth, examples, prompting guide |
+| TinyFish API Docs | `123d2659-98bb-4843-8a26-f6c6f4c09a30` | Full TinyFish API reference, auth, examples, prompting guide |
 | Job Posting | `8b21a4c4-f34c-49e0-8afb-66d69d5d8086` | Role description, expectations, red flags |
 | Product Growth SOP | `fb92db29-bc94-4ad0-b3d1-ab8c37177610` | Onboarding, strategy rules, deliverable format, payment |
 | Use Case Library | `702d4811-c513-4ec9-9803-9c971500b886` | 60+ existing use cases — what's been built already |
@@ -42,7 +42,7 @@ It returns structured JSON with exactly what you asked for.
 
 **To search across all**: `search.sh universal "your query"`
 **To read a specific doc page**: `sources.sh read <nia_id> "index.md"`
-**To search Mino API specifics**: `sources.sh grep "123d2659-98bb-4843-8a26-f6c6f4c09a30" "pattern"`
+**To search TinyFish API specifics**: `sources.sh grep "123d2659-98bb-4843-8a26-f6c6f4c09a30" "pattern"`
 
 ## WHAT "QUALIFIED" MEANS (The Quality Bar)
 
@@ -55,17 +55,17 @@ Your submission MUST include ALL of these or it gets rejected:
 | **Technical Assets** | Code repository link |
 | **Live Demo or Video** | Working URL or screen recording |
 | **App Screenshot** | For their website showcase |
-| **Duplicable PRD** | Architecture overview, code snippet, exact Mino prompt, sample JSON output |
+| **Duplicable PRD** | Architecture overview, code snippet, exact TinyFish prompt, sample JSON output |
 
 PRD must be generated using this prompt to your vibe-coding tool:
-> "Please generate a standard developer documentation example for the Mino API use case I've developed." (Full prompt in SOP Nia source)
+> "Please generate a standard developer documentation example for the TinyFish API use case I've developed." (Full prompt in SOP Nia source)
 
 ## STRATEGY: WHAT TO BUILD (AND WHAT NOT TO)
 
 ### The Rules
 
 - **Uniqueness Rule**: Check the Use Case Library FIRST. If it exists, pick a different industry/problem.
-- **Scale Rule**: Prioritize tasks requiring parallel processing (checking many niche sites simultaneously). This is where Mino wins.
+- **Scale Rule**: Prioritize tasks requiring parallel processing (checking many niche sites simultaneously). This is where TinyFish wins.
 - **Complexity Rule**: Target complex single-query tasks competitors (Atlas, Comet) struggle with — 5-step forms, nested menus, dynamic "Load More" logic.
 - **Iteration Exception**: You may revisit an existing use case ONLY if significantly improving reliability, speed, or adding an action step (from "finding" to "auto-filling/booking").
 
@@ -112,8 +112,8 @@ Check the SOP for "Homer's Use Cases" bounty list:
 
 ```
 1. Scaffold the app (Next.js recommended — strong frontend dev)
-2. Integrate Mino API (see docs: auth, sync/async endpoints, SSE streaming)
-3. Build frontend that showcases the Mino automation visually
+2. Integrate TinyFish API (see docs: auth, sync/async endpoints, SSE streaming)
+3. Build frontend that showcases the TinyFish automation visually
 4. Get a live demo URL (Vercel, Lovable, Railway — anything works)
 5. Record a demo video
 6. Submit PR to github.com/tinyfish-io/tinyfish-cookbook (folder: vietnam-bike-price-scout/)
@@ -123,7 +123,7 @@ Check the SOP for "Homer's Use Cases" bounty list:
 ### Tech Stack (Recommended)
 
 - **Frontend**: Next.js + Tailwind (you're strong here)
-- **Mino API**: REST — sync endpoint for simple, SSE streaming for live UX
+- **TinyFish API**: REST — sync endpoint for simple, SSE streaming for live UX
 - **Hosting**: Vercel (free, instant deploys, most existing demos use it)
 - **Build tool**: Claude Code (this tool — your primary)
 
@@ -169,10 +169,10 @@ Check the SOP for "Homer's Use Cases" bounty list:
 
 - Speed of delivery (72h window is the bar — faster = better)
 - Creative "wait, you can DO that?" factor
-- Showing Mino's parallel processing advantage (many sites at once)
+- Showing TinyFish's parallel processing advantage (many sites at once)
 - Clean demo video showing the automation in action
 - Social post that genuinely helps people discover what's possible
-- Honest bug reports when Mino fails — they value feedback for their eng team
+- Honest bug reports when TinyFish fails — they value feedback for their eng team
 
 ## KEY CONTACTS
 
@@ -180,11 +180,11 @@ Check the SOP for "Homer's Use Cases" bounty list:
 - **Application email**: keith@tinyfish.ai
 - **GitHub repo for PRs**: github.com/tinyfish-io/tinyfish-cookbook
 - **Post generator**: https://tinyfish-social.vercel.app/
-- **Mino playground**: https://mino.ai/
+- **TinyFish playground**: https://tinyfish.ai/
 
 ## NOTES
 
-- Mino API credits are unlimited for interns — don't worry about cost
+- TinyFish API credits are unlimited for interns — don't worry about cost
 - They'll provide Claude Code / Lovable / Cursor access after you pass the 48h challenge
 - Payment: 50% after PR merged, 50% after post is live
 - Performance bonus: 5k views = $20, up to 1M views = $1,000
